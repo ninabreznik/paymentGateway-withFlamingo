@@ -1,0 +1,18 @@
+{
+  "name": "my-component",
+  "version": "0.0.1",
+  "description": "some description",
+  "scripts": {
+    "start": "budo demo/demo.js:bundle.js --open --live",
+    "build": "browserify demo/demo.js > bundle.js"
+  },
+  "author": "yourname",
+  "license": "MIT",
+  "devDependencies": {
+    "browserify": "^16.2.3",
+    "budo": "^11.8.4"
+  },
+  "dependencies": {
+  },
+  "main": "index.js"
+}
