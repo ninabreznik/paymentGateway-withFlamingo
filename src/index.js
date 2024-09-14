@@ -13,30 +13,37 @@ async function payForm () {
       <div>
         <h2>Enter your Nostr Wallet connect string</h2>
         <input id="nwc"/>
-        <h2>Send payment</h2>
+        <h2>Create invoice (enter the amount)</h2>
         <input id="amount" type="number" min="1"/>
+        <h2>Pay invoice (enter the invoice string)</h2>
+        <input id="invoice_string"/>
       </div>
       <div>
-        <h2>Click to create the invoice</h2>
-      <input id="pay" type="submit" value="Create invoice" />
+        <h2>Click to submit the form</h2>
+      <input id="submit" type="submit" value="Submit" />
       </div>
     </div>
   `
-  const payBtn = shadow.querySelector('input#pay')
+  const payBtn = shadow.querySelector('input#submit')
   payBtn.onclick = async () => {
     const nwc = shadow.querySelector('input#nwc').value
+    const nwc_info = nwcjs.processNWCstring(nwc)
     const amount = Number(shadow.querySelector('input#amount').value)
-    const invoice = await makeInvoice(amount, nwc)
-    showInvoiceData(invoice)
+    const invoice_string = shadow.querySelector('input#invoice_string').value
+    if (amount) {
+      var invoice = await makeInvoice(amount, nwc_info)
+      showInvoiceData(invoice)
+    }
+    if (invoice_string) {
+      payInvoice(invoice_string, nwc_info)
+    }
     // const payResponse = await window.provider.sendPayment(invoice)
     // if (validatePreimage(payResponse.preimage)) console.log('yay, payment successful') 
   }
   return el
 }
 
-async function makeInvoice (amount, NWC) {  
-  console.log({NWC})
-  const nwc_info = nwcjs.processNWCstring(NWC)
+async function makeInvoice (amount, nwc_info) {  
   const amt = amount
   const desc = 'QuestApp invoice'
   const invoice = await nwcjs.makeInvoice(nwc_info, amt, desc)
@@ -74,4 +81,9 @@ async function showInvoiceData (invoice) {
 
   // return promise
 
+}
+
+async function payInvoice (invoice_string, nwc_info) {
+  const amount = 3
+  const res = await nwcjs.tryToPayInvoice(nwc_info, invoice_string, amount)
 }
