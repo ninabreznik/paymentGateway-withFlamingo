@@ -13,6 +13,10 @@
     "budo": "^11.8.4"
   },
   "dependencies": {
+    "ws": "^8.18.0"
   },
-  "main": "index.js"
+  "main": "index.js",
+  "optionalDependencies": {
+    "bufferutil": "^4.0.8"
+  }
 }
